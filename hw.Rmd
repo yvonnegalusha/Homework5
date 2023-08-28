@@ -1,49 +1,84 @@
 ---
-title: "Homework 5"
+title: "Homework 4"
 output: html_notebook
 ---
 
-| Homework 5                     |                Data Analysis with R |
+| Homework 4                     |                Data Analysis with R |
 | :---                           |                                ---: |
-| Due by 11:59 PM on Wed Sep 27  | Business Analytics Graduate Program |
-| Submit via GitHub              |                 BAIS:6060 Fall 2023 |
+| Due by 11:59 PM on Wed Sep 20  | Business Analytics Graduate Program |
+| Submit via codePost            |                 BAIS:6060 Fall 2023 |
 
 # Instructions
 
-This homework covers Module 5. Refer to the corresponding materials and
-ICE (with solutions) posted on ICON. Follow all of the instructions
-given on prior homeworks, referring to them as necessary.
+This homework covers Module 4. Refer to the corresponding materials and
+ICE (with solutions) posted on ICON.
+
+Follow all of the guidelines given on prior homeworks, referring to
+them as necessary. Here are some important reminders:
+
+- include the required `library(...)` commands in your notebook;
+
+- for this assignment, be sure to use `qplot(...)` instead of `plot(...)`.
+
+- while we used `log` in our module examples, in general only use `log`
+when you have a good reason to do so (e.g., correcting the shape of a
+histogram); I will indicate when to do this.
+
+**Big Hint!** The exercises below ask you to save your outputs to PNGs
+files. In general, get into the habit of first exporting your graphic
+with `ggsave(...)` *before* checking to see if the graphic looks correct.
+The plot within an R notebook will look different than the final output
+file, and yet the output file should be considered the final version
+(since, for example, it could be added to a report). Your homework will
+be graded by regenerating the graphics files from your notebook. There
+is no need to upload your output files to GitHub.
 
 # Exercises
 
-
-
-## #1
-
-The data `medicaid.csv` contains Medicaid eligibility and reimbursement
-numbers for the state of Iowa by county and by date of report (monthly
-over the course of several years). Use the data to create a choropleth
-map showing total Medicaid reimbursements for the report date August 31,
-2019. Use `ggsave(...)` to save the map in a file called `1.png`. You do
-not have to improve the basic map, e.g., you do not have to add titles,
-format the numbers, etc. And you don't need to upload `1.png` to GitHub;
-just put the `ggsave(...)` command in this notebook.
-
 ```{r}
+# Load some libraries. You may need additional ones
+library(readr)
+library(forcats)
+suppressPackageStartupMessages(library(dplyr))
 
 ```
 
-## #2
+Carefully review the included files `movies.txt` and
+`movies_transformed.csv` and then execute the following code to load the
+CSV file, which matches the solution of the previous homework. Then
+complete the exercises below:
+
+```{r}
+my_col_types <- cols(
+    OpeningDate = col_date(),
+    Title = col_character(),
+    Studio = readr::col_factor(), # "readr::" prefix avoids conflict with scales
+    OpeningGross = col_integer(),
+    OpeningTheaters = col_integer(),
+    TotalGross = col_integer(),
+    TotalTheaters = col_integer(),
+    GrossRatio = col_double(),
+    Stamina = readr::col_factor() # "readr::" prefix avoids conflict with scales
+)
+df <- read_csv("movies_transformed.csv", col_types = my_col_types)
+new_levels <- levels(df$Studio)
+new_levels <- setdiff(new_levels, "Other")
+new_levels <- sort(new_levels)
+new_levels <- c(new_levels, "Other")
+df <- mutate(df, Studio = fct_relevel(Studio, new_levels))
+```
+
+## #1
+
+Complete the following *without* changing the contents of `df`.
 
 ### (a)
 
-Scrape the "Week-by-Week Games" table at [this
-website](https://www.pro-football-reference.com/years/2018/games.htm),
-which refers to the year 2018. Please use the `fill=TRUE` option
-as shown in the module, and do not post-process the downloaded
-table---except as instructed in parts (b) and (c) below. Save the table
-in a data frame called `nfl`. [Hint: All the data is at the above URL.
-There is no need to navigate to any other web pages.]
+Create a graphic based on a single integer/numeric/double column
+of data. (Do not use two or more columns to build this graphic.) You
+can choose the column and the type of graphic. Export the graphic to
+a PNG file named `1a.png` via the `ggsave(...)` command with option
+`dpi=600`.
 
 ```{r}
 
@@ -51,12 +86,10 @@ There is no need to navigate to any other web pages.]
 
 ### (b)
 
-If the data is read correctly in part (a), then you'll notice that
-some column names are repeated and some column names are the empty
-string. Use the `clean_names(...)` function of the `janitor` package
-to overwrite `nfl` with a new version having unique column names.
-[Hint: Just use `clean_names(nfl)`, i.e., don't specify any options to
-`clean_names`.]
+Create a graphic based on a single factor column of data. (Do
+not use two or more columns to build this graphic.) You can choose the
+column and the type of graphic. Export the graphic to a PNG file named
+`1b.png` via the `ggsave(...)` command with option `dpi=600`.
 
 ```{r}
 
@@ -64,12 +97,80 @@ to overwrite `nfl` with a new version having unique column names.
 
 ### (c)
 
-You should also notice that several rows of `nfl` correspond to repeated
-column headers at the source web page. There may also be other rows that
-look like headers rather than actual data. Remove these rows without
-affecting any other aspect of the data frame. [Note: Best practices
-are to code this in such a way that, if you wanted to scrape 2019 data
-instead, your code for this part would still work without any changes.]
+Create a scatter plot based on exactly two
+integer/numeric/double columns of data. (Do not use three or more
+columns to build this graphic.) You can choose the columns. Export the
+graphic to a PNG file named `1c.png` via the `ggsave(...)` command with
+option `dpi=600`.
+
+```{r}
+
+```
+
+### (d)
+
+Create a heatmap based on exactly two integer/numeric/double
+columns of data. (Do not use three or more columns to build this
+graphic.) You can choose the columns. Export the graphic to a PNG file
+named `1d.png` via the `ggsave(...)` command with option `dpi=600`.
+
+```{r}
+
+```
+
+### (e)
+
+Create boxplots of an integer/numeric/double column on a log
+scale against a factor column. You can choose the columns. Export the
+graphic to a PNG file named `1e.png` via the `ggsave(...)` command with
+option `dpi=600`.
+
+```{r}
+
+```
+
+### (f)
+
+Use faceting to create a graphic involving exactly two factor
+columns. (Do not use three or more columns to build this graphic.)
+Export the graphic to a PNG file named `1f.png` via the `ggsave(...)`
+command with option `dpi=600`.
+
+```{r}
+
+```
+
+## #2
+
+Without changing the contents of df, create a graphic involving three
+or more columns of data. You can choose all features of the graphic, but
+please adhere to the following rules:
+
+- Produce the graphic with the following audience in mind: a colleague,
+friend, or family member who is familiar with movies and who has
+experience reading and understanding graphics of various types, e.g.,
+boxplots in a trade magazine. (Your classmates or the professor---people
+who are looking at the data to the same level of detail---are *not* the
+target audience.)
+
+- Give the graphic a main title, which helps explain the graphic. Here
+are some example titles: "Number of Movies Per Studio" and "Gross Ticket
+Sales Versus Number of Theaters".
+
+- Relabel axis titles and legend titles so that they are readable and
+understandable.
+
+- Relabel the numbers on axes so that they are readable and
+understandable, e.g., avoid scientific notation and use "$" for dollar
+amounts.
+
+- Make sure no text is accidentally cut out of the graphic. Also make
+sure text does not overlap.
+
+- Export the graphic to a PNG file named `2.png` via the `ggsave(...)`
+command with option `dpi=600`. Also use options `width=6` and `height=4`
+unless you have a good reason to deviate from these defaults. (Making
+the graphic easier to read and understand is a good reason to deviate.)
 
 ```{r}
 
