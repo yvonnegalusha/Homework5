@@ -14,9 +14,11 @@ This homework covers Module 5. Refer to the corresponding materials and
 ICE (with solutions) posted on ICON. Follow all of the instructions
 given on prior homeworks, referring to them as necessary.
 
-# Exercises
+# Exercises (put all library commands next)
 
+```{r}
 
+```
 
 ## #1
 
